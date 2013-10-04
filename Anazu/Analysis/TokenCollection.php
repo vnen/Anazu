@@ -69,6 +69,7 @@ class TokenCollection extends \ArrayObject implements Interfaces\ITokenCollectio
     /**
      * Appends a token to the collection.
      * @param Interfaces\IToken $token The token to append.
+     * @throws \InvalidArgumentException
      */
     public function offsetSet($index, $token)
     {
@@ -98,6 +99,11 @@ class TokenCollection extends \ArrayObject implements Interfaces\ITokenCollectio
         parent::offsetUnset($ref);
     }
 
+    /**
+     * Builds a new TokenCollection.
+     * @param array $start An array of {@link Interfaces\IToken} objects to start the collection.
+     * @throws \InvalidArgumentException
+     */
     public function __construct(array $start = array())
     {
         parent::__construct(array());

@@ -33,7 +33,7 @@ class Tokenizer implements Interfaces\ITokenizer
     /**
      * Separates a text in tokens.
      * 
-     * @param sting $text The text to tokenize.
+     * @param string $text The text to tokenize.
      * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
      */
     public function tokenize($text)

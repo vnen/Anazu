@@ -70,6 +70,7 @@ class Token implements Interfaces\IToken
      * 
      * @param string $token
      * @param array $positions
+     * @throws \InvalidArgumentException
      */
     public function __construct($token, array $positions)
     {
@@ -96,6 +97,7 @@ class Token implements Interfaces\IToken
      * Adds a text position for this token.
      * 
      * @param int $position The position to add.
+     * @throws \InvalidArgumentException
      */
     public function addPosition($position)
     {
