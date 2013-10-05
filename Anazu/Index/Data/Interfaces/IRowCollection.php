@@ -18,23 +18,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Analysis\Interfaces;
+namespace Anazu\Index\Data\Interfaces;
 
 /**
- * Description of Tokenizer
+ * Interface for a collection of rows.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Analysis/Interfaces
+ * @category Index/Data/Interfaces
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface ITokenizer
+interface IRowCollection extends \Traversable
 {
-    /**
-     * Separates a text in tokens.
-     * 
-     * @param sting|IDocument $text The text or document to tokenize.
-     * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
-     */
-    function tokenize($document);
+    
 }

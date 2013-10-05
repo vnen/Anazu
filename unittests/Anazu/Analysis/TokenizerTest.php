@@ -64,4 +64,27 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
         $this->assertContains('a', $all_tokens);
         $this->assertContains('text', $all_tokens);
     }
+    
+    public function testTokenizingWithDocumentGiven()
+    {
+        $document = new Anazu\Analysis\Document(1, 'this is a text');
+        
+        $tokens = $this->tokenizer->tokenize($document);
+
+        $all_tokens = $tokens->getTokensArray();
+
+        $this->assertContains('this', $all_tokens);
+        $this->assertContains('is', $all_tokens);
+        $this->assertContains('a', $all_tokens);
+        $this->assertContains('text', $all_tokens);
+    }
+
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidDocumentGiven()
+    {
+        $this->tokenizer->tokenize($this->tokenizer);
+    }
 }

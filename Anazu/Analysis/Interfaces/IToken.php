@@ -43,6 +43,12 @@ interface IToken
      */
     function getPositions();
     /**
+     * Gets the id of the document associated with this token.
+     * 
+     * @return int|string The id of the document.
+     */
+    function getDocumentId();
+    /**
      * Adds a text position for this token.
      * 
      * @param int $position The position to add.

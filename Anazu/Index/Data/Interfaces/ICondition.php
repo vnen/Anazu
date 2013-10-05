@@ -18,23 +18,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Analysis\Interfaces;
+namespace Anazu\Index\Data\Interfaces;
 
 /**
- * Description of Tokenizer
+ * A condition for a search in the table.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Analysis/Interfaces
+ * @category Index/Data/Interfaces
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface ITokenizer
+interface ICondition
 {
     /**
-     * Separates a text in tokens.
+     * Sets a condition for a field. This can be called multiple times and the conditions should stack.
      * 
-     * @param sting|IDocument $text The text or document to tokenize.
-     * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
+     * @param string $field The field to condition.
+     * @param string $operator The operation to use. This varies based on the table implementation.
+     * @param mixed $value The value to filter the field.
      */
-    function tokenize($document);
+    function setField($field, $operator, $value);    
 }

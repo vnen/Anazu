@@ -18,23 +18,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Analysis\Interfaces;
+namespace Anazu\Index\Data\Interfaces;
 
 /**
- * Description of Tokenizer
+ * Interface for a single register in a table.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Analysis/Interfaces
+ * @category Index/Data/Interfaces
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface ITokenizer
+interface IRow
 {
     /**
-     * Separates a text in tokens.
+     * Gets the identification key of this row.
      * 
-     * @param sting|IDocument $text The text or document to tokenize.
-     * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
+     * @return string|int The id key.
      */
-    function tokenize($document);
+    function getId();
+    /**
+     * Sets the value of a field.
+     * @param string $field The name of the field to set.
+     * @param mixed $value The value to be set to.
+     */
+    function setField($field, $value);
+    /**
+     * Gets the value of a field.
+     * @param string $field The name of the field to get.
+     * @return mixed The value of such field.
+     * @throws \OutOfBoundsException
+     */
+    function getField($field);
 }

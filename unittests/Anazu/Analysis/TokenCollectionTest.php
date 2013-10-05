@@ -39,12 +39,18 @@ class TokenCollectionTest extends PHPUnit_Framework_TestCase
      * @var Anazu\Analysis\Interfaces\ITokenCollection
      */
     protected $tokenCollection;
+    /**
+     *
+     * @var int
+     */
+    protected $documentId;
 
     protected function setUp()
     {
         parent::setUp();
 
         $this->tokenCollection = new TokenCollection();
+        $this->documentId = 1;
     }
 
     public function testGetArray()
@@ -70,10 +76,10 @@ class TokenCollectionTest extends PHPUnit_Framework_TestCase
      */
     protected function fillCollection()
     {
-        $this->tokenCollection[] = new Token('this', array(0, 25, 35));
-        $this->tokenCollection[] = new Token('is', array(1, 26, 80, 43));
-        $this->tokenCollection[] = new Token('a', array(4, 8, 15, 16, 23, 42));
-        $this->tokenCollection[] = new Token('test', array(3));
+        $this->tokenCollection[] = new Token('this', array(0, 25, 35), $this->documentId);
+        $this->tokenCollection[] = new Token('is', array(1, 26, 80, 43), $this->documentId);
+        $this->tokenCollection[] = new Token('a', array(4, 8, 15, 16, 23, 42), $this->documentId);
+        $this->tokenCollection[] = new Token('test', array(3), $this->documentId);
         return array(
             array('a', 'is', 'test', 'this'), // uniques
             array(// whole
@@ -104,7 +110,7 @@ class TokenCollectionTest extends PHPUnit_Framework_TestCase
 
     public function testUnsetToken()
     {
-        $this->tokenCollection[3] = new Token('a', array(0));
+        $this->tokenCollection[3] = new Token('a', array(0), $this->documentId);
         $filled_array = $this->tokenCollection->getTokensArray();
 
         $this->assertNotEmpty($filled_array);

@@ -21,8 +21,7 @@
 namespace Anazu\Analysis;
 
 /**
- * Represents a single token in a document. This doesn't have any info about
- * the document itself, though.
+ * Represents a single token in a document.
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
@@ -43,6 +42,12 @@ class Token implements Interfaces\IToken
      * @var array The stored positions.
      */
     protected $positions = NULL;
+    
+    /**
+     * The id of the document associated with this token.
+     * @var string|int The id of the document associated with this token.
+     */
+    protected $documentId = NULL;
 
     /**
      * Gets the positions of the token in the document.
@@ -64,20 +69,33 @@ class Token implements Interfaces\IToken
     {
         return $this->token;
     }
+    
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
 
     /**
      * Constructs a new token.
      * 
-     * @param string $token
-     * @param array $positions
+     * @param string $token The token itself.
+     * @param array $positions The positions where the token appear in the document.
+     * @param int|string|Interfaces\IDocument The document associated with this token or only its id key.
      * @throws \InvalidArgumentException
      */
-    public function __construct($token, array $positions)
+    public function __construct($token, array $positions, $id)
     {
         if (!is_string($token))
         {
             throw new \InvalidArgumentException(
             sprintf('Argument %s must be a %s. %s given.', 'token', 'string', gettype($token))
+            );
+        }
+        if (!is_string($id) && !is_int($id) && !($id instanceof Interfaces\IDocument))
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either %s, %s or %s. %s given.'
+                    , 'id', 'an int', 'a string', 'an IDocument', gettype($id))
             );
         }
         array_walk($positions, function($elem)
@@ -89,6 +107,12 @@ class Token implements Interfaces\IToken
                 ));
             }
         });
+        
+        if($id instanceof Interfaces\IDocument)
+        {
+            $id = $id->getId();
+        }
+        $this->documentId = $id;
         $this->token = $token;
         $this->positions = array_combine($positions, $positions);
     }

@@ -30,17 +30,32 @@ namespace Anazu\Analysis;
  */
 class Tokenizer implements Interfaces\ITokenizer
 {
+    protected $documentId = 0;
+
     /**
      * Separates a text in tokens.
      * 
-     * @param string $text The text to tokenize.
+     * @param string|Interfaces\IDocument $document The text or document to tokenize.
      * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
      */
-    public function tokenize($text)
+    public function tokenize($document)
     {
-        return new TokenCollection($this->_consolidateTokens($this->_insensitizeTokens($this->_splitTokens($text))));
+        if ( !is_string($document) && !($document instanceof Interfaces\IDocument) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either %s or %s. %s given.', 'document', 'a string', 'an IDocument', gettype($document))
+            );
+        }
+        
+        if($document instanceof Interfaces\IDocument)
+        {
+            $this->documentId = $document->getId();
+            $document = $document->getText();
+        }
+        
+        return new TokenCollection($this->_consolidateTokens($this->_insensitizeTokens($this->_splitTokens($document))));
     }
-    
+
     /**
      * Splits the text to an array of tokens.
      * 
@@ -51,7 +66,7 @@ class Tokenizer implements Interfaces\ITokenizer
     {
         return preg_split('/[^\pL]+/u', $text);
     }
-    
+
     /**
      * Converts all tokens to lower case, so the tokenization will be case
      * insensitive. Useful to have as a separate function in case of some
@@ -63,11 +78,12 @@ class Tokenizer implements Interfaces\ITokenizer
      */
     protected function _insensitizeTokens($tokens)
     {
-        return array_map(function($elem){
+        return array_map(function($elem)
+        {
             return strtolower(iconv("utf-8", "ascii//TRANSLIT//IGNORE", $elem));
         }, $tokens);
     }
-    
+
     /**
      * Consolidate tokens strings into token objects.
      * 
@@ -77,10 +93,10 @@ class Tokenizer implements Interfaces\ITokenizer
     protected function _consolidateTokens($tokens)
     {
         $result = array();
-        $i=0;
+        $i = 0;
         foreach ($tokens as $token)
         {
-            if(array_key_exists($token, $result))
+            if ( array_key_exists($token, $result) )
             {
                 // @codeCoverageIgnoreStart
                 $result[$token]->addPosition($i++);
@@ -88,9 +104,10 @@ class Tokenizer implements Interfaces\ITokenizer
             // @codeCoverageIgnoreEnd
             else
             {
-                $result[$token] = new Token($token, array($i++));
+                $result[$token] = new Token($token, array($i++), $this->documentId);
             }
         }
         return $result;
     }
+
 }

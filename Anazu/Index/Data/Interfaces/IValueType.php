@@ -18,23 +18,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Analysis\Interfaces;
+namespace Anazu\Index\Data\Interfaces;
 
 /**
- * Description of Tokenizer
+ * Interface for a type of data in a column.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Analysis/Interfaces
+ * @category Index/Data/Interfaces
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface ITokenizer
+interface IValueType
 {
     /**
-     * Separates a text in tokens.
-     * 
-     * @param sting|IDocument $text The text or document to tokenize.
-     * @return \Anazu\Analysis\Interfaces\ITokenCollection A collection of tokens with respective frequencies and positions.
+     * Gets the name of the type.
+     * @return string The name.
      */
-    function tokenize($document);
+    function getName();
+    /**
+     * Gets the size of this type to be stored.
+     * @return mixed The size to be stored or extra info, as in set, or enum types.
+     */
+    function getSize();
 }

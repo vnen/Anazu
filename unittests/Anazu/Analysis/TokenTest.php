@@ -2,6 +2,7 @@
 
 use \PHPUnit_Framework_TestCase;
 use Anazu\Analysis\Token;
+use Anazu\Analysis\Interfaces\IDocument;
 
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
@@ -50,6 +51,17 @@ class TokenTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     protected $positions;
+    /**
+     *
+     * @var IDocument
+     */
+    protected $document;
+    
+    /**
+     *
+     * @var int
+     */
+    protected $documentId;
 
     protected function setUp()
     {
@@ -57,8 +69,10 @@ class TokenTest extends PHPUnit_Framework_TestCase
 
         $this->tokenString = 'test';
         $this->positions = array(0, 20, 45);
+        $this->documentId = 1;
+        $this->document = new Anazu\Analysis\Document($this->documentId, 'this is a test text');
 
-        $this->token = new Token($this->tokenString, $this->positions);
+        $this->token = new Token($this->tokenString, $this->positions, $this->document);
     }
 
     public function testGetToken()
@@ -74,6 +88,22 @@ class TokenTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->positions, $positions);
     }
+    
+    public function testGetDocumentId()
+    {
+        $retrieved_id = $this->token->getDocumentId();
+        
+        $this->assertEquals($this->documentId, $retrieved_id);
+    }
+    
+    public function testGetDocumentIdFromDirectlyAssignedId()
+    {
+        $assigned_id = 5;
+        $token = new Token($this->tokenString, $this->positions, $assigned_id);
+        $retrieved_id = $token->getDocumentId();
+        
+        $this->assertEquals($assigned_id, $retrieved_id);
+    }
 
     /**
      * @expectedException InvalidArgumentException
@@ -81,7 +111,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     public function testConstructInvalidTokenArrayGiven()
     {
         $this->setExpectedException('InvalidArgumentException');
-        new Token(array(2, 4), $this->positions);
+        new Token(array(2, 4), $this->positions, $this->documentId);
     }
 
     /**
@@ -90,7 +120,15 @@ class TokenTest extends PHPUnit_Framework_TestCase
     public function testConstructInvalidTokenObjectGiven()
     {
         $this->setExpectedException('InvalidArgumentException');
-        new Token($this->token, $this->positions);
+        new Token($this->token, $this->positions, $this->documentId);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructInvalidDocumentIdGiven()
+    {
+        new Token($this->tokenString, $this->positions, $this->positions);
     }
     
     public function testAddPosition()
@@ -128,7 +166,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateInvalidPositions()
     {
-        new Token($this->tokenString, array($this->token));
+        new Token($this->tokenString, array($this->token), $this->documentId);
     }
     
     public function testToStringConvertion()

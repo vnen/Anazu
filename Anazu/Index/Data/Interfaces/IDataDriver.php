@@ -18,17 +18,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Interfaces;
+namespace Anazu\Index\Data\Interfaces;
 
 /**
- * Interface for a persisted index.
+ * This is an interface used by the index to store the information persistently 
+ * and retrieve it when needed.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Interfaces
+ * @category Index/Data/Interfaces
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IIndex
+interface IDataDriver
 {
     
 }
