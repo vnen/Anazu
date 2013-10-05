@@ -130,4 +130,11 @@ class TokenTest extends PHPUnit_Framework_TestCase
     {
         new Token($this->tokenString, array($this->token));
     }
+    
+    public function testToStringConvertion()
+    {
+        $string = (string)$this->token;
+        
+        $this->assertEquals($this->tokenString, $string);
+    }
 }

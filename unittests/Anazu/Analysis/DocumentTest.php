@@ -1,7 +1,7 @@
 <?php
 
 use \PHPUnit_Framework_TestCase;
-use Anazu\Analysis\Token;
+use Anazu\Analysis\Document;
 
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
@@ -22,7 +22,7 @@ use Anazu\Analysis\Token;
  */
 
 /**
- * Test for Token class.
+ * Test for Document class.
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
@@ -30,104 +30,97 @@ use Anazu\Analysis\Token;
  * @category Analysis
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class TokenTest extends PHPUnit_Framework_TestCase
+class DocumentTest extends PHPUnit_Framework_TestCase
 {
 
     /**
      *
-     * @var Anazu\Analysis\Interfaces\IToken
+     * @var Anazu\Analysis\Document
      */
-    protected $token;
+    protected $document;
 
     /**
      *
      * @var string
      */
-    protected $tokenString;
+    protected $text;
 
     /**
      *
-     * @var array
+     * @var int
      */
-    protected $positions;
+    protected $id;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->tokenString = 'test';
-        $this->positions = array(0, 20, 45);
-
-        $this->token = new Token($this->tokenString, $this->positions);
+        $this->text = 'This is a document text example just for testing.';
+        $this->id = 20;
+        $this->document = new Document($this->id, $this->text);
     }
 
-    public function testGetToken()
+    public function testGetText()
     {
-        $token = $this->token->getToken();
-
-        $this->assertEquals($this->tokenString, $token);
-    }
-
-    public function testGetPositions()
-    {
-        $positions = $this->token->getPositions();
-
-        $this->assertEquals($this->positions, $positions);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructInvalidTokenArrayGiven()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        new Token(array(2, 4), $this->positions);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testConstructInvalidTokenObjectGiven()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        new Token($this->token, $this->positions);
+        $text = $this->document->getText();
+        
+        $this->assertEquals($this->text, $text);
     }
     
-    public function testAddPosition()
+    public function testGetId()
     {
-        $old_positions = $this->token->getPositions();
-        $pos = 5;
+        $id = $this->document->getId();
         
-        $this->token->addPosition($pos);
+        $this->assertEquals($this->id, $id);
+    }
+    
+    public function testSetAndGetField()
+    {
+        $title = 'This is title';
+        $this->document->setField('title', $title);
         
-        $new_positions = $this->token->getPositions();
+        $got_title = $this->document->getField('title');
         
-        $this->assertNotEquals($new_positions, $old_positions);
-        $this->assertNotContains($pos, $old_positions);
-        $this->assertContains($pos, $new_positions);
+        $this->assertEquals($title, $got_title);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException OutOfBoundsException
      */
-    public function testAddInvalidObjectAsPosition()
+    public function testGetUndefinedFieldError()
     {
-        $this->token->addPosition($this->token);
+        $this->document->getField('ooops');
     }
     
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testAddInvalidArrayAsPosition()
+    public function testGetInvalidFieldName()
     {
-        $this->token->addPosition($this->positions);
+        $this->document->getField($this->document);
     }
     
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testCreateInvalidPositions()
+    public function testSetInvalidFieldName()
     {
-        new Token($this->tokenString, array($this->token));
+        $this->document->setField($this->document, 'a');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructInvalidId()
+    {
+        new Document($this->document, 'text');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConstructInvalidText()
+    {
+        new Document(2, array(1,2,4));
     }
 }

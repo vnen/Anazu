@@ -44,6 +44,12 @@ class Document implements Interfaces\IDocument
     protected $text;
 
     /**
+     * Stores the custom fields of this document.
+     * @var array Stores the custom fields of this document.
+     */
+    protected $fields = array();
+
+    /**
      * Returns the id of this document, so it can be located in the index.
      * 
      * @return string|int The document id.
@@ -71,9 +77,21 @@ class Document implements Interfaces\IDocument
      */
     function getField($name)
     {
-        
+        if ( !is_string($name) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be a %s. %s given.', 'name', 'string', gettype($name))
+            );
+        }
+        if ( !isset($this->fields[$name]) )
+        {
+            throw new \OutOfBoundsException(
+            sprintf('The field "%" was not found in this document.', $name)
+            );
+        }
+        return $this->fields[$name];
     }
-    
+
     /**
      * Sets the value of a field.
      * 
@@ -83,7 +101,13 @@ class Document implements Interfaces\IDocument
      */
     function setField($name, $value)
     {
-        
+        if ( !is_string($name) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be a %s. %s given.', 'name', 'string', gettype($name))
+            );
+        }
+        $this->fields[$name] = $value;
     }
 
     /**
@@ -94,6 +118,18 @@ class Document implements Interfaces\IDocument
      */
     public function __construct($id, $text)
     {
+        if ( !is_int($id) && !is_string($id) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either a %s or a %s. %s given.', 'id', 'string', 'integer', gettype($id))
+            );
+        }
+        if ( !is_string($text) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be a %s. %s given.', 'text', 'string', gettype($text))
+            );
+        }
         $this->id = $id;
         $this->text = $text;
     }

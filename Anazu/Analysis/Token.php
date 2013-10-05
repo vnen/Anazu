@@ -77,7 +77,7 @@ class Token implements Interfaces\IToken
         if (!is_string($token))
         {
             throw new \InvalidArgumentException(
-            sprintf('Argument %s must be a string. %s given.', 'token', gettype($token))
+            sprintf('Argument %s must be a %s. %s given.', 'token', 'string', gettype($token))
             );
         }
         array_walk($positions, function($elem)
@@ -85,7 +85,7 @@ class Token implements Interfaces\IToken
             if (!is_int($elem))
             {
                 throw new \InvalidArgumentException(sprintf(
-                        'Argument %s must contain only integers. %s found.', 'position', gettype($elem)
+                        'Argument %s must contain only %s. %s found.', 'position', 'integers', gettype($elem)
                 ));
             }
         });

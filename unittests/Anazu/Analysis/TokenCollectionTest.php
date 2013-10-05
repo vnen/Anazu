@@ -114,5 +114,11 @@ class TokenCollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEmpty($empty_array);
     }
+    
+    public function testUnsetUndefinedToken()
+    {
+        unset($this->tokenCollection[3]);
+        // as long as there's no error, no problem.
+    }
 
 }

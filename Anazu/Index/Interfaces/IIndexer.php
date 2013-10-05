@@ -20,15 +20,54 @@
 
 namespace Anazu\Index\Interfaces;
 
+use Anazu\Analysis\Interfaces\IDocument;
 /**
  * Interface for an object responsible for indexing tokens.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category category
- * @license URL name name
+ * @category Index/Interfaces
+ * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
 interface IIndexer
 {
-    //put your code here
+    /**
+     * Opens an index to edit.
+     * 
+     * @param IIindex $index The index to open.
+     */
+    function open(IIndex $index);
+    
+    /**
+     * Adds a new document to be indexed. It should not be actually indexed
+     * before the {@link commit} method is called.
+     * 
+     * @param IDocument $document The document to add.
+     */
+    function queueDocument(IDocument $document);
+    
+    /**
+     * Removes a document from the queue to be indexed. This should not remove
+     * a document from the actual index.
+     * 
+     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     *        with the same id.
+     */
+    function dequeueDocument($id);
+
+    /**
+     * Removes a document from the actual index. The operation should not be completed
+     * before there's a call to the {@link commit} method.
+     * 
+     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     *        with the same id.
+     */
+    function removeDocument($id);
+    
+    /**
+     * Commit the queued alterations to the index.
+     * 
+     * @return bool Whether the commit operation was succesfully completed or not.
+     */
+    function commit();    
 }

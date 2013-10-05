@@ -82,8 +82,10 @@ class Tokenizer implements Interfaces\ITokenizer
         {
             if(array_key_exists($token, $result))
             {
+                // @codeCoverageIgnoreStart
                 $result[$token]->addPosition($i++);
             }
+            // @codeCoverageIgnoreEnd
             else
             {
                 $result[$token] = new Token($token, array($i++));
