@@ -18,17 +18,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data;
+namespace Anazu\Index\Data\Abstracts;
 
 /**
  * Description of AbstractRow
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data
+ * @category Index/Data/Abstracts
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-abstract class AbstractRow implements Interfaces\IRow
+abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
 {
 
     /**

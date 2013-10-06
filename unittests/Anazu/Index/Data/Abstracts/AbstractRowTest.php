@@ -18,15 +18,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data;
+namespace Anazu\Index\Data\Abstracts;
 
 /**
- * Test for InvertedIndexer class.
+ * Test for AbstractRow class.
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
  * @subpackage Test
- * @category Index/Data
+ * @category Index/Data/Abstracts
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
 class AbstractRowTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +50,7 @@ class AbstractRowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->rowId = 20;
-        $this->row = $this->getMockForAbstractClass('\Anazu\Index\Data\AbstractRow', array($this->rowId));
+        $this->row = $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array($this->rowId));
     }
 
     public function testGetId()
@@ -65,7 +65,7 @@ class AbstractRowTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructInvalidId()
     {
-        $this->row = $this->getMockForAbstractClass('\Anazu\Index\Data\AbstractRow', array($this->row));
+        $this->row = $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array($this->row));
     }
 
     public function testSetAndGetField()
