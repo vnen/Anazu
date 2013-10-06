@@ -3,6 +3,8 @@ Anazu
 
 **Still in development**
 
+[![Build Status](https://travis-ci.org/vnen/Anazu.png?branch=master)](https://travis-ci.org/vnen/Anazu)
+
 This is an attempt of mine to create a text indexing and searching engine
 written entirely in PHP.
 
