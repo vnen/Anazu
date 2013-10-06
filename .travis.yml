@@ -1,5 +1,5 @@
 language: php
 php:
     - "5.3"
-before_script: composer install
-script: phpunit --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-text unittests
+before_script: composer install -v --no-dev
+script: phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-text unittests
