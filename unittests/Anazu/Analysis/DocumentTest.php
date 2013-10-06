@@ -1,8 +1,5 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
-use Anazu\Analysis\Document;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -21,6 +18,11 @@ use Anazu\Analysis\Document;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Analysis;
+
+use InvalidArgumentException;
+use OutOfBoundsException;
+
 /**
  * Test for Document class.
  *
@@ -30,12 +32,12 @@ use Anazu\Analysis\Document;
  * @category Analysis
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class DocumentTest extends PHPUnit_Framework_TestCase
+class DocumentTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      *
-     * @var Anazu\Analysis\Document
+     * @var Document
      */
     protected $document;
 

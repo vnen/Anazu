@@ -42,5 +42,4 @@ class InvertedIndexer extends AbstractIndexer
     {
         
     }
-
 }

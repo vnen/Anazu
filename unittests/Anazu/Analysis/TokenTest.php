@@ -1,9 +1,5 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
-use Anazu\Analysis\Token;
-use Anazu\Analysis\Interfaces\IDocument;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -22,6 +18,12 @@ use Anazu\Analysis\Interfaces\IDocument;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Analysis;
+
+use Anazu\Analysis\Interfaces\IDocument;
+use Anazu\Analysis\Interfaces\IToken;
+use InvalidArgumentException;
+
 /**
  * Test for Token class.
  *
@@ -31,12 +33,12 @@ use Anazu\Analysis\Interfaces\IDocument;
  * @category Analysis
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class TokenTest extends PHPUnit_Framework_TestCase
+class TokenTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      *
-     * @var Anazu\Analysis\Interfaces\IToken
+     * @var IToken
      */
     protected $token;
 
@@ -70,7 +72,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
         $this->tokenString = 'test';
         $this->positions = array(0, 20, 45);
         $this->documentId = 1;
-        $this->document = new Anazu\Analysis\Document($this->documentId, 'this is a test text');
+        $this->document = new Document($this->documentId, 'this is a test text');
 
         $this->token = new Token($this->tokenString, $this->positions, $this->document);
     }

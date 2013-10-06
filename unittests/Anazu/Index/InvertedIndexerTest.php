@@ -1,7 +1,5 @@
 <?php
 
-namespace Anazu\Index;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -20,13 +18,15 @@ namespace Anazu\Index;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Index;
+
 /**
  * Test for InvertedIndexer class.
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
  * @subpackage Test
- * @category Analysis
+ * @category Index
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
 class InvertedIndexerTest extends \PHPUnit_Framework_TestCase

@@ -49,4 +49,10 @@ interface IRow
      * @throws \OutOfBoundsException
      */
     function getField($field);
+    
+    /**
+     * Removes the value of a field.
+     * @param string $field The name of the field to unset.
+     */
+    function unsetField($field);
 }

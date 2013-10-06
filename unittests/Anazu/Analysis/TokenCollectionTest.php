@@ -1,9 +1,5 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
-use \Anazu\Analysis\TokenCollection;
-use \Anazu\Analysis\Token;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -22,6 +18,8 @@ use \Anazu\Analysis\Token;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Analysis;
+
 /**
  * Test for TokenCollection class.
  *
@@ -31,7 +29,7 @@ use \Anazu\Analysis\Token;
  * @category Analysis
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class TokenCollectionTest extends PHPUnit_Framework_TestCase
+class TokenCollectionTest extends \PHPUnit_Framework_TestCase
 {
 
     /**

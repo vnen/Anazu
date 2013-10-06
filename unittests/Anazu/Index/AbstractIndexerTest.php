@@ -1,7 +1,5 @@
 <?php
 
-namespace Anazu\Index;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -20,13 +18,15 @@ namespace Anazu\Index;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Index;
+
 /**
  * Test for AbstractIndexer class.
  *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
  * @subpackage Test
- * @category Analysis
+ * @category Index
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
 class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +50,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockDriver = $this->getMock('\Anazu\Index\Data\Interfaces\IDataDriver');
-        $this->indexer =  $this->getMock('Anazu\Index\AbstractIndexer', array('commit'),array($this->mockDriver));
+        $this->indexer = $this->getMockForAbstractClass('Anazu\Index\AbstractIndexer', array($this->mockDriver));
     }
 
     public function testGetSetTokenizer()

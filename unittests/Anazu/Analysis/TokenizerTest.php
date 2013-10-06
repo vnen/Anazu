@@ -1,8 +1,5 @@
 <?php
 
-use \PHPUnit_Framework_TestCase;
-use Anazu\Analysis\Tokenizer;
-
 /*
  * Copyright (C) 2013 George Marques <george at georgemarques.com.br>
  *
@@ -21,6 +18,11 @@ use Anazu\Analysis\Tokenizer;
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Analysis;
+
+use Anazu\Analysis\Interfaces\ITokenizer;
+use InvalidArgumentException;
+
 /**
  * Test for Tokeninzer class.
  *
@@ -30,12 +32,12 @@ use Anazu\Analysis\Tokenizer;
  * @category Analysis
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class TokenizerTest extends PHPUnit_Framework_TestCase
+class TokenizerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
      *
-     * @var Anazu\Analysis\Interfaces\ITokenizer
+     * @var ITokenizer
      */
     protected $tokenizer;
 
@@ -67,7 +69,7 @@ class TokenizerTest extends PHPUnit_Framework_TestCase
     
     public function testTokenizingWithDocumentGiven()
     {
-        $document = new Anazu\Analysis\Document(1, 'this is a text');
+        $document = new Document(1, 'this is a text');
         
         $tokens = $this->tokenizer->tokenize($document);
 
