@@ -7,11 +7,12 @@ namespace Anazu\Index;
  */
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var Indexer
      */
     protected $indexer;
-    
+
     /**
      *
      * @var Data\Interfaces\IDataDriver
@@ -28,76 +29,144 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->indexer = new Indexer($this->mockDriver);
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
-     * @covers Anazu\Index\Indexer::setTokenizer
-     * @covers Anazu\Index\Indexer::getTokenizer
-     * @todo   Implement testSetTokenizer().
-     */
     public function testGetSetTokenizer()
-    {        
-        $old_token = $this->indexer->getTokenizer();        
+    {
+        $old_token = $this->indexer->getTokenizer();
         $this->assertNull($old_token);
-        
+
         $tokenizer = $this->getMock('\Anazu\Analysis\Tokenizer');
         $this->indexer->setTokenizer($tokenizer);
-        
+
         $new_token = $this->indexer->getTokenizer();
         $this->assertSame($tokenizer, $new_token);
     }
 
-    /**
-     * @covers Anazu\Index\Indexer::queueDocument
-     * @todo   Implement testQueueDocument().
-     */
-    public function testQueueDocument()
+    public function testQueueDequeueDocument()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $document = new \Anazu\Analysis\Document(1, 'this is a test');
+
+        $old_doc = FALSE;
+        try
+        {
+            $this->setExpectedException('\OutOfBoundsException');
+            $old_doc = $this->indexer->dequeueDocument($document->getId());
+        }
+        catch (Exception $ex)
+        {
+            
+        }
+
+        $this->assertEquals(FALSE, $old_doc);
+
+        $this->indexer->queueDocument($document);
+        $new_doc = $this->indexer->dequeueDocument($document->getId());
+
+        $this->assertSame($document, $new_doc);
     }
 
-    /**
-     * @covers Anazu\Index\Indexer::dequeueDocument
-     * @todo   Implement testDequeueDocument().
-     */
-    public function testDequeueDocument()
+    public function testDequeueDocumentWithId()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $docId = 1;
+        $document = new \Anazu\Analysis\Document($docId, 'this is a test');
+
+        $this->indexer->queueDocument($document);
+        $new_doc = $this->indexer->dequeueDocument($docId);
+
+        $this->assertSame($document, $new_doc);
     }
 
-    /**
-     * @covers Anazu\Index\Indexer::removeDocument
-     * @todo   Implement testRemoveDocument().
-     */
     public function testRemoveDocument()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('Rebuild the logic, to check if things are happening.');
+        
+        $mockDriver = $this->getMock('Anazu\Index\Data\Interfaces\IDataDriver');
+        $indexer = new Indexer($mockDriver);
+
+        $docId = 50;
+
+        $indexer->removeDocument($docId);
+
+        $result = $indexer->commit();
+
+        $this->assertEquals(true, $result);
+    }
+
+    public function testCancelRemoveDocument()
+    {
+        $this->markTestIncomplete('Rebuild the logic, to check if things are happening.');
+        
+        $mockDriver = $this->getMock('Anazu\Index\Data\Interfaces\IDataDriver');
+        $indexer = new Indexer($mockDriver);
+
+        $docId = 50;
+
+        $indexer->removeDocument($docId);
+        $indexer->cancelRemoveDocument($docId);
+
+        $mockDriver->expects($this->never())
+                ->method('delete');
+
+        $result = $indexer->commit();
+
+        $this->assertEquals(true, $result);
+    }
+
+    public function testCommit()
+    {
+        $this->markTestIncomplete();
+        
+        $mockDriver = $this->getMock('Anazu\Index\Data\Interfaces\IDataDriver');
+        $indexer = new Indexer($mockDriver);
+        
+        $document = new \Anazu\Analysis\Document(1, 'this is a test');
+        $document = new \Anazu\Analysis\Document(2, 'this is another test');
+        $document = new \Anazu\Analysis\Document(4, 'this is another test');
+        
+        $indexer->queueDocument($document);
+        $indexer->removeDocument(2); // Repeating the id, I'm updating the document
+        $indexer->removeDocument(3);
+        
+        
     }
 
     /**
-     * @covers Anazu\Index\Indexer::commitInterfaces
-     * @todo   Implement testCommit().
+     * @expectedException \InvalidArgumentException
      */
-    public function testCommit()
+    public function testDequeueInvalidId()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->indexer->dequeueDocument($this->indexer);
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testRemoveInvalidId()
+    {
+        $this->indexer->removeDocument($this->indexer);
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testDequeueInexistentId()
+    {
+        $this->indexer->dequeueDocument(50);
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testCancelRemoveInexistentId()
+    {
+        $this->indexer->cancelRemoveDocument(50);
+    }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCancelRemoveInvalidId()
+    {
+        $this->indexer->cancelRemoveDocument($this->indexer);
+    }
+
 }

@@ -20,7 +20,7 @@
 
 namespace Anazu\Index;
 
-use Anazu\Index\Interfaces\IDocument;
+use Anazu\Analysis\Interfaces\IDocument;
 use Anazu\Index\Data\Interfaces\IDataDriver;
 
 /**
@@ -33,11 +33,13 @@ use Anazu\Index\Data\Interfaces\IDataDriver;
  */
 class Indexer implements Interfaces\IIndexer
 {
+
     /**
      * The driver for persistent storage.
      * @var IDataDriver The driver for persistent storage.
      */
     protected $dataDriver;
+
     /**
      * The queue of documents to be indexed.
      * @var array The queue of documents to be indexed.
@@ -45,11 +47,16 @@ class Indexer implements Interfaces\IIndexer
     protected $documentAddQueue;
     
     /**
+     * The queue of documents to be removed from the index.
+     * @var array The queue of documents to be removed from the index.
+     */
+    protected $documentRemoveQueue;
+
+    /**
      * The tokenizer to use when processing the documents.
      * @var \Anazu\Analysis\Interfaces\ITokenizer The tokenizer to use when processing the documents.
      */
     protected $tokenizer = NULL;
-
 
     /**
      * Sets the tokenizer to be used in this indexer.
@@ -86,24 +93,83 @@ class Indexer implements Interfaces\IIndexer
      * Removes a document from the queue to be indexed. This won't remove
      * a document from the actual index.
      * 
-     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     * @param IDocument|int|string $id The id of the document to dequeue or an {@link IDocument}
      *        with the same id.
+     * @return IDocuemnt The dequeued document.
+     * @throws \InvalidArgumentException If the id is not integer nor an IDocument.
+     * @throws \OutOfBoundsException If the id is not found in the queue.
      */
     function dequeueDocument($id)
     {
-        
+        if ( !is_int($id) && !is_string($id) && !($id instanceof IDocument) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either %s, %s or %s. %s given.'
+                    , 'id', 'an int', 'a string', 'an IDocument', gettype($id))
+            );
+        }
+        if ( $id instanceof IDocument )
+        {
+            $id = $id->getId();
+        }
+        if ( !isset($this->documentAddQueue[$id]) )
+        {
+            throw new \OutOfBoundsException(
+            sprintf('The document id "%" was not set to be indexed.', $id)
+            );
+        }
+        $doc = $this->documentAddQueue[$id];
+        unset($this->documentAddQueue[$id]);
+        return $doc;
     }
 
     /**
      * Removes a document from the actual index. The operation won't be completed
      * before there's a call to the {@link commit} method.
      * 
-     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     * @param IDocument|int|string $id The id of the document to dequeue or an {@link IDocument}
      *        with the same id.
+     * @throws \InvalidArgumentException If the id is not a integer, not a string and not an IDocument.
      */
     function removeDocument($id)
     {
-        
+        if ( !is_int($id) && !is_string($id) && !($id instanceof IDocument) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either %s, %s or %s. %s given.'
+                    , 'id', 'an int', 'a string', 'an IDocument', gettype($id))
+            );
+        }
+        if ( $id instanceof IDocument )
+        {
+            $id = $id->getId();
+        }
+        $this->documentRemoveQueue[$id] = $id;
+    }
+
+    /**
+     * Removes a document from the queue to be removed from the index.
+     * 
+     * @param IDocument|int|string $id The id of the document to dequeue or an {@link IDocument}
+     *        with the same id.
+     * @throws \InvalidArgumentException If the $id has not a valid type.
+     * @throws \OutOfBoundsException If the $id was not queued to be removed.
+     */
+    function cancelRemoveDocument($id)
+    {
+        if ( !is_int($id) && !is_string($id) && !($id instanceof IDocument) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be either %s, %s or %s. %s given.'
+                    , 'id', 'an int', 'a string', 'an IDocument', gettype($id))
+            );
+        }
+        if ( !isset($this->documentRemoveQueue[$id]) )
+        {
+            throw new \OutOfBoundsException(
+            sprintf('The document id "%" was not set to be indexed.', $id)
+            );
+        }
     }
 
     /**
@@ -116,9 +182,10 @@ class Indexer implements Interfaces\IIndexer
         
     }
 
-    public function __construct(IDataDriver $dataDriver) 
+    public function __construct(IDataDriver $dataDriver)
     {
         $this->dataDriver = $dataDriver;
         $this->documentAddQueue = array();
     }
+
 }

@@ -19,6 +19,8 @@
  */
 
 namespace Anazu\Index\Interfaces;
+
+use Anazu\Analysis\Interfaces\IDocument;
 /**
  * Interface for an object responsible for indexing tokens.
  * 
@@ -57,6 +59,7 @@ interface IIndexer
      * 
      * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
      *        with the same id.
+     * @return IDocuemnt The dequeued document.
      */
     function dequeueDocument($id);
 
@@ -64,10 +67,18 @@ interface IIndexer
      * Removes a document from the actual index. The operation should not be completed
      * before there's a call to the {@link commit} method.
      * 
-     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     * @param IDocument|int $id The id of the document to remove or an {@link IDocument}
      *        with the same id.
      */
     function removeDocument($id);
+    
+    /**
+     * Removes a document from the queue to be removed from the index.
+     * 
+     * @param IDocument|int $id The id of the document to dequeue or an {@link IDocument}
+     *        with the same id.
+     */
+    function cancelRemoveDocument($id);
     
     /**
      * Commit the queued alterations to the index.
