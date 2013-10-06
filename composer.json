@@ -1,7 +1,7 @@
 {
     "name": "vnen/anazu",
     "description": "Full-text indexing/searching engine in PHP.",
-    "license": "GPLv2",
+    "license": "GPL-2.0+",
     "authors": [
         {
             "name": "George Marques",
