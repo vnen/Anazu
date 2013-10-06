@@ -31,7 +31,7 @@ use Anazu\Index\Data\Interfaces\IDataDriver;
  * @category Index
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-class Indexer implements Interfaces\IIndexer
+abstract class AbstractIndexer implements Interfaces\IIndexer
 {
 
     /**
@@ -45,7 +45,7 @@ class Indexer implements Interfaces\IIndexer
      * @var array The queue of documents to be indexed.
      */
     protected $documentAddQueue;
-    
+
     /**
      * The queue of documents to be removed from the index.
      * @var array The queue of documents to be removed from the index.
@@ -164,28 +164,39 @@ class Indexer implements Interfaces\IIndexer
                     , 'id', 'an int', 'a string', 'an IDocument', gettype($id))
             );
         }
+        if ( $id instanceof IDocument )
+        {
+            $id = $id->getId();
+        }
         if ( !isset($this->documentRemoveQueue[$id]) )
         {
             throw new \OutOfBoundsException(
             sprintf('The document id "%" was not set to be indexed.', $id)
             );
         }
+        unset($this->documentRemoveQueue[$id]);
+        return($id);
+    }
+
+    /**
+     * Creates a new standard indexer.
+     * @param \Anazu\Index\Data\Interfaces\IDataDriver $dataDriver
+     */
+    public function __construct(IDataDriver $dataDriver)
+    {
+        $this->dataDriver = $dataDriver;
+        $this->documentAddQueue = array();
+        $this->documentRemoveQueue = array();
     }
 
     /**
      * Commit the queued alterations to the index.
      * 
      * @return bool Whether the commit operation was succesfully completed or not.
-     */
-    function commit()
+     *
+    public function commit()
     {
         
-    }
-
-    public function __construct(IDataDriver $dataDriver)
-    {
-        $this->dataDriver = $dataDriver;
-        $this->documentAddQueue = array();
-    }
+    }*/
 
 }

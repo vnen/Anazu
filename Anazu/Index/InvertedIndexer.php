@@ -18,21 +18,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Index;
+
+use Anazu\Analysis\Interfaces\IDocument;
+use Anazu\Index\Data\Interfaces\IDataDriver;
 
 /**
- * Interface for a collection of rows.
- * 
+ * Description of InvertedIndexer
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @category Index
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IRowCollection extends \Traversable
+class InvertedIndexer extends AbstractIndexer
 {
     /**
-     * Gets the amount of rows in this collection.
-     * @return int The number of rows.
+     * Commit the queued alterations to the index.
+     * 
+     * @return bool Whether the commit operation was succesfully completed or not.
      */
-    public function count();
+    public function commit()
+    {
+        
+    }
+
 }

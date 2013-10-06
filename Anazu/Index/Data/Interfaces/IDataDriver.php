@@ -31,5 +31,27 @@ namespace Anazu\Index\Data\Interfaces;
  */
 interface IDataDriver
 {
+    /**
+     * Creates a new table in this driver. This should not be completed before a call to {@link commit}.
+     * @param ITable $table The table to add.
+     */
+    public function createTable(ITable $table);
+    /**
+     * Removes a table from this driver. This should not be completed before a call to {@link commit}.
+     * @param string|ITable $name The table name to remove, or a table with the same name.
+     */
+    public function dropTable($name);
+    /**
+     * Gets a table from the driver.
+     * @param string $name The name of the table.
+     * @return ITable The table.
+     * @throws \OutOfBoundsException If the name is not an existing table.
+     */
+    public function &getTable($name);
+    /**
+     * Commits the pending operations to the persistent database.
+     * @return bool Whether the operation was sucessful or not.
+     */
+    public function commit();
     
 }

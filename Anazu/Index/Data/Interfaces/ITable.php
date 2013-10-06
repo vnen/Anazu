@@ -40,26 +40,41 @@ interface ITable
     /**
      * This updates any row that matches the condition with new values.
      * 
-     * @param ICondition $condition The condition to match updateable rows.
      * @param IRow $new_data The new values to insert. Only the fields set will be updated.
+     * @param array $conditions An array of {@link IConditions} to match updateable rows.
      * @return int The number of updated rows.
      */
-    function update(ICondition $condition, IRow $new_data);
+    function update(IRow $new_data, array $conditions);
     /**
      * Gets the rows matching a conditons.
-     * @param ICondition $condition The condition to match.
+     * @param array $conditions An array of {@link IConditions} to match.
      * @return IRowCollection A collection of rows, which might be empty.
      */
-    function retrieve(ICondition $condition);
+    function retrieve(array $conditions);
     /**
      * Deletes the rows matching a condition.
-     * @param ICondition $condition The condition to match.
+     * @param array $conditions An array of {@link IConditions} to match.
      * @return int The number of deleted rows.
      */
-    function delete(ICondition $condition);
+    function delete(array $conditions);
     /**
-     * Get an array of all columns in this table.
+     * Gets an array of all columns in this table.
      * @return array The columns collection.
      */
     function getColumns();
+    /**
+     * Gets the name of this table.
+     * @return string The name.
+     */
+    function getName();
+    /**
+     * Sets the driver to be used in this table.
+     * @param IDataDriver $driver The driver to be set to.
+     */
+    function setDriver(IDataDriver $driver);
+    /**
+     * Gets the driver used in this table.
+     * @return IDataDriver The driver being used.
+     */
+    function getDriver();
 }
