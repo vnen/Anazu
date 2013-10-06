@@ -1,3 +1,4 @@
 language: php
+php:
     - "5.3"
 script: phpunit --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-text
