@@ -9,7 +9,7 @@ before_script:
 
 script:
     - mkdir -p build/logs 
-    - phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit-travis.xml --coverage-clover build/logs/clover.xml unittests
+    - vendor/bin/phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit-travis.xml --coverage-clover build/logs/clover.xml unittests
 
 after_script:
     - php vendor/bin/coveralls -v
