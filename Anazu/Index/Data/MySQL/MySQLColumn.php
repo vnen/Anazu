@@ -18,46 +18,43 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Index\Data\MySQL;
+
+use Anazu\Index\Data\Abstracts;
 
 /**
- * Interface for a column in a table.
- * 
+ * A column in a MySQL table.
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @category Index/Data/MySQL
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IColumn
+class MySQLColumn extends Abstracts\AbstractColumn
 {
     /**
-     * Gets the name of the column.
-     * @return string The name.
-     */
-    function getName();
-    /**
-     * Gets the type information about this column.
-     * @return IValueType The type.
-     */
-    function getType();
-    /**
-     * Gets the type of index for this column, such as "Primary" or "unique".
-     * @return string The index type.
-     */
-    function getIndex();
-    /**
-     * Gets the default value for this column.
-     * @return mixed The default value.
-     */
-    function getDefaultValue();
-    
-    /**
-     * Creates a new column.
-     * 
+     * Creates a new MySQLColumn.
      * @param string $name The name of this column.
      * @param \Anazu\Index\Data\Interfaces\IValueType $type The type of this column.
      * @param mixed $default The default value for this column.
      * @param string $index The type of index for this column.
      */
-    function __construct($name, IValueType $type, $default = NULL, $index = NULL);
+    public function __construct($name, \Anazu\Index\Data\Interfaces\IValueType $type, $default = NULL, $index = NULL)
+    {
+        parent::__construct($name, $type, $default, $index);
+        $valid_indexes = array(
+            'INDEX', 'PRIMARY', 'UNIQUE', 'FULLTEXT'
+        );
+        if(!is_null($index) && !in_array(strtoupper($index), $valid_indexes, true))
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be a valid %s.'
+                    , 'index', 'index type')
+            );
+        }
+        elseif(!is_null($index))
+        {
+            $this->index = strtoupper($index);
+        }
+    }
 }

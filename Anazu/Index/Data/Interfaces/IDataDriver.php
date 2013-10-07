@@ -96,4 +96,15 @@ interface IDataDriver
      * @return int The number of deleted rows.
      */
     function delete($table, ICondition $condition);
+    /**
+     * Gets the specific concrete type for data interfaces.
+     * For example, if you want the concrete class for a table
+     * in this driver, you call this function with the parameter
+     * $object = 'ITable'. If you want a condition, call with
+     * $object = 'ICondition' and so on.
+     * 
+     * @param string $object The interface to ask.
+     * @return string The full qualified name of the concrete class.
+     */
+    function getTypeForDriver($object);
 }

@@ -18,36 +18,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Tests;
 
 /**
- * Interface for a type of data in a column.
- * 
+ * Generic test case for databases.
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @category Tests
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IValueType
+abstract class DatabaseTestCase extends \PHPUnit_Extensions_Database_TestCase
 {
-
-    /**
-     * Gets the name of the type.
-     * @return string The name.
-     */
-    function getName();
-
-    /**
-     * Gets the size of this type to be stored.
-     * @return mixed The size to be stored or extra info, as in set, or enum types.
-     */
-    function getSize();
-
-    /**
-     * Creates a new AbstractValueType.
-     * @param string $name The name of this type.
-     * @param mixed $size The size or set for this type.
-     * @throws \InvalidArgumentException If the name is not a string.
-     */
-    function __construct($name, $size = NULL);
+    static private $pdo = null;
+ 
+    private $connection = null;
+ 
+    final public function getConnection()
+    {
+        if ($this->connection === null) {
+            if (self::$pdo == null) {
+                self::$pdo = new \PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+            }
+            $this->connection = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+        }
+ 
+        return $this->connection;
+    }
 }

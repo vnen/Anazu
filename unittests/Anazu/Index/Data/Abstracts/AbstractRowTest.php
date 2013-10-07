@@ -161,4 +161,32 @@ class AbstractRowTest extends \PHPUnit_Framework_TestCase
         
         $this->assertTrue(isset($this->row->field));
     }
+    
+    public function testConstructWithFields()
+    {
+        $row = $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array(
+            $this->rowId,
+            array(
+                'test' => 'value',
+                'test2' => 'value2',
+            )
+            ));
+        $this->assertEquals('value', $row->getField('test'));
+        $this->assertEquals('value2', $row->getField('test2'));
+    }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testConstructWithInvalidFields()
+    {
+        $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array(
+            $this->rowId,
+            array(
+                'value',  // The fields cannot be integers
+                'value2', // So if the array is not associative
+                'value3'  // there should be an error
+            )
+            ));
+    }
 }

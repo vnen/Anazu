@@ -3,11 +3,13 @@ language: php
 php:
     - "5.3"
 
-before_script: composer install -v --dev
+before_script:
+    - mysql -e 'drop database if exists `anazutest`; create database `anazutest`;'
+    - composer install -v --dev
 
 script:
     - mkdir -p build/logs 
-    - phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-clover build/logs/clover.xml unittests
+    - phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit-travis.xml --coverage-clover build/logs/clover.xml unittests
 
 after_script:
     - php vendor/bin/coveralls -v

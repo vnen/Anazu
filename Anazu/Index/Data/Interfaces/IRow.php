@@ -55,4 +55,11 @@ interface IRow
      * @param string $field The name of the field to unset.
      */
     function unsetField($field);
+    
+    /**
+     * Creates a new row.
+     * @param int|string $id The id key for this row.
+     * @param array $fields The fields to start this row with.
+     */
+    function __construct($id, array $fields = array());
 }

@@ -18,36 +18,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Index\Data\MySQL;
+
+use Anazu\Index\Data\Abstracts;
 
 /**
- * Interface for a type of data in a column.
- * 
+ * A row in a MySQL table.
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @category Index/Data/MySQL
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IValueType
+class MySQLRow extends Abstracts\AbstractRow
 {
-
-    /**
-     * Gets the name of the type.
-     * @return string The name.
-     */
-    function getName();
-
-    /**
-     * Gets the size of this type to be stored.
-     * @return mixed The size to be stored or extra info, as in set, or enum types.
-     */
-    function getSize();
-
-    /**
-     * Creates a new AbstractValueType.
-     * @param string $name The name of this type.
-     * @param mixed $size The size or set for this type.
-     * @throws \InvalidArgumentException If the name is not a string.
-     */
-    function __construct($name, $size = NULL);
+    
 }

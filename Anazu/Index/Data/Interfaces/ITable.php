@@ -30,6 +30,7 @@ namespace Anazu\Index\Data\Interfaces;
  */
 interface ITable
 {
+
     /**
      * Inserts a new row into the table.
      * @param IRow $row The row to insert. The id should be generated if not set
@@ -37,6 +38,7 @@ interface ITable
      * @return bool Whether or not the row was inserted.
      */
     function insert(IRow &$row);
+
     /**
      * This updates any row that matches the condition with new values.
      * 
@@ -45,36 +47,51 @@ interface ITable
      * @return int The number of updated rows.
      */
     function update(ICondition $condition, IRow $new_data);
+
     /**
      * Gets the rows matching a conditons.
      * @param ICondition $condition The condition to match.
      * @return IRowCollection A collection of rows, which might be empty.
      */
     function retrieve(ICondition $condition);
+
     /**
      * Deletes the rows matching a condition.
      * @param ICondition $condition The condition to match.
      * @return int The number of deleted rows.
      */
     function delete(ICondition $condition);
+
     /**
      * Gets an array of all columns in this table.
      * @return array The columns collection.
      */
     function getColumns();
+
     /**
      * Gets the name of this table.
      * @return string The name.
      */
     function getName();
+
     /**
      * Sets the driver to be used in this table.
      * @param IDataDriver $driver The driver to be set to.
      */
     function setDriver(IDataDriver $driver);
+
     /**
      * Gets the driver used in this table.
      * @return IDataDriver The driver being used.
      */
     function getDriver();
+
+    /**
+     * Creates a new table.
+     * @param string $name The name of this table.
+     * @param array $columns The columns of this table.
+     * @param \Anazu\Index\Data\Interfaces\IDataDriver $driver The driver to persist the data.
+     * @throws \InvalidArgumentException If the name is not a string.
+     */
+    function __construct($name, array $columns, IDataDriver $driver = NULL);
 }

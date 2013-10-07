@@ -114,8 +114,9 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
     /**
      * Creates a new row.
      * @param int|string $id The id key for this row.
+     * @param array $fields The fields to start this row with.
      */
-    public function __construct($id, $fields = NULL)
+    public function __construct($id, array $fields = array())
     {
         if ( !is_int($id) && !is_string($id) )
         {
@@ -125,8 +126,21 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
             );
         }
         $this->id = $id;
+        if ( !empty($fields) )
+        {
+            array_walk(array_keys($fields), function($elem)
+            {
+                if ( !is_string($elem) )
+                {
+                    throw new \InvalidArgumentException(sprintf(
+                            'Argument %s must contain only %s keys. %s key found.', 'fields', 'string', gettype($elem)
+                    ));
+                }
+            });
+        }
+        $this->fields = $fields;
     }
-    
+
     /**
      * Magic function to set fields.
      * @param string $name The field to set.
@@ -136,7 +150,7 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
     {
         $this->setField($name, $value);
     }
-    
+
     /**
      * Magic function to get fields.
      * @param string $name The field to get.
@@ -146,7 +160,7 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
     {
         return $this->getField($name);
     }
-    
+
     /**
      * Magic method for unsetting fields.
      * @param string $name The name of the field.
@@ -155,6 +169,7 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
     {
         $this->unsetField($name);
     }
+
     /**
      * Magic method for checking if a field exists.
      * @param string $name The field to check.
@@ -164,4 +179,5 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
     {
         return array_key_exists($name, $this->fields);
     }
+
 }

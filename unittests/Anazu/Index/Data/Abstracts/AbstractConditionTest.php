@@ -160,11 +160,10 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
     {
         $field = 'test';
         $value = 'something';
-        $this->condition->addAndCondition($field , 
-                $this->condition // <- oops
+        $this->condition->addAndCondition($field, $this->condition // <- oops
                 , $value);
     }
-    
+
     /**
      * @expectedException \InvalidArgumentException
      */

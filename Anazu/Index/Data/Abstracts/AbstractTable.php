@@ -163,5 +163,4 @@ abstract class AbstractTable implements ITable
         $this->name = $name;
         $this->columns = $columns;
     }
-
 }
