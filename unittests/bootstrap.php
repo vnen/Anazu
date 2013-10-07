@@ -21,7 +21,6 @@
 /**
  * @author George Marques <george at georgemarques.com.br>
  */
-include_once __DIR__ . '/../vendor/autoload.php';
 
 function autoload($className)
 {

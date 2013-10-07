@@ -18,9 +18,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
 
 <phpunit colors="false" >
-    <testsuites>
+    <testsuites name="Main Suite">
         <testsuit>
-            <directory>unittests</directory>
+            <directory>Tests</directory>
         </testsuit>
     </testsuites>
     <filter>

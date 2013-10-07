@@ -1,5 +1,13 @@
 language: php
+
 php:
     - "5.3"
-before_script: composer install -v --no-dev
-script: phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-text unittests
+
+before_script: composer install -v --dev
+
+script:
+    - mkdir -p build/logs 
+    - phpunit --colors --bootstrap unittests/bootstrap.php --configuration phpunit.xml --coverage-clover build/logs/clover.xml unittests
+
+after_script:
+    - php vendor/bin/coveralls -v
