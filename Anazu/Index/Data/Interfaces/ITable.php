@@ -40,23 +40,23 @@ interface ITable
     /**
      * This updates any row that matches the condition with new values.
      * 
+     * @param ICondition $condition The condition to match updateable rows.
      * @param IRow $new_data The new values to insert. Only the fields set will be updated.
-     * @param array $conditions An array of {@link IConditions} to match updateable rows.
      * @return int The number of updated rows.
      */
-    function update(IRow $new_data, array $conditions);
+    function update(ICondition $condition, IRow $new_data);
     /**
      * Gets the rows matching a conditons.
-     * @param array $conditions An array of {@link IConditions} to match.
+     * @param ICondition $condition The condition to match.
      * @return IRowCollection A collection of rows, which might be empty.
      */
-    function retrieve(array $conditions);
+    function retrieve(ICondition $condition);
     /**
      * Deletes the rows matching a condition.
-     * @param array $conditions An array of {@link IConditions} to match.
+     * @param ICondition $condition The condition to match.
      * @return int The number of deleted rows.
      */
-    function delete(array $conditions);
+    function delete(ICondition $condition);
     /**
      * Gets an array of all columns in this table.
      * @return array The columns collection.

@@ -18,17 +18,39 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Index\Data;
 
 /**
- * Interface for a collection of rows.
- * 
+ * A simple collection of rows.
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @category Index/Data
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IRowCollection extends \Traversable, \Countable
+class RowCollection extends \ArrayObject implements Interfaces\IRowCollection, \IteratorAggregate
 {
-    
+    /**
+	 * Sets the value at the specified index to newval
+	 * @link http://php.net/manual/en/arrayobject.offsetset.php
+	 * @param mixed $index <p>
+	 * The index being set.
+	 * </p>
+	 * @param mixed $newval <p>
+	 * The new value for the <i>index</i>.
+	 * </p>
+	 * @return void
+     * @throws \InvalidArgumentException If the $newval is not an {@link Interfaces\IRow}.
+	 */
+    public function offsetSet($index, $newval)
+    {
+        if ( !($newval instanceof Interfaces\IRow) )
+        {
+            throw new \InvalidArgumentException(
+            sprintf('Argument %s must be %s. %s given.'
+                    , 'newval', 'an IRow', gettype($newval))
+            );
+        }
+        parent::offsetSet($index, $newval);
+    }
 }

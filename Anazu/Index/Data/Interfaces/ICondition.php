@@ -21,7 +21,8 @@
 namespace Anazu\Index\Data\Interfaces;
 
 /**
- * A condition for a search in the table.
+ * A condition for a search in the table. It supports multiple search conditions stacked together in only one object.
+ * The functions in this interface should make difference of the order in which they are called.
  * 
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
@@ -31,11 +32,39 @@ namespace Anazu\Index\Data\Interfaces;
 interface ICondition
 {
     /**
-     * Sets a condition for a field. This can be called multiple times and the conditions should stack.
+     * Sets a condition for a field that will be ANDed with the others.
      * 
      * @param string $field The field to condition.
      * @param string $operator The operation to use. This varies based on the table implementation.
      * @param mixed $value The value to filter the field.
      */
-    function setField($field, $operator, $value);    
+    function addAndCondition($field, $operator, $value);
+    
+    /**
+     * Sets a condition for a field that will be ORed with the others.
+     * 
+     * @param string $field The field to condition.
+     * @param string $operator The operation to use. This varies based on the table implementation.
+     * @param mixed $value The value to filter the field.
+     */
+    function addOrCondition($field, $operator, $value);
+    
+    /**
+     * Sets a condition for a field that will be negated to match.
+     * 
+     * @param string $field The field to condition.
+     * @param string $operator The operation to use. This varies based on the table implementation.
+     * @param mixed $value The value to filter the field.
+     */
+    function addNotCondition($field, $operator, $value);
+    
+    /**
+     * Opens a parenthesis "(" to allow complex conditions.
+     */
+    function openParens();
+    
+    /**
+     * Closes a parenthesis ")" to allow complex conditions.
+     */
+    function closeParens();
 }

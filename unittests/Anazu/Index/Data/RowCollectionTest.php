@@ -18,17 +18,50 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Anazu\Index\Data\Interfaces;
+namespace Anazu\Index\Data;
 
 /**
- * Interface for a collection of rows.
- * 
+ * Test for RowCollection class.
+ *
  * @author George Marques <george at georgemarques.com.br>
  * @package Anazu
- * @category Index/Data/Interfaces
+ * @subpackage Test
+ * @category Index/Data/Abstracts
  * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-interface IRowCollection extends \Traversable, \Countable
+class RowCollectionTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var RowCollection
+     */
+    protected $rowCollection;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->rowCollection = new RowCollection;
+    }
     
+    public function testSetAndGet()
+    {
+        $row = $this->getMock('Anazu\Index\Data\Interfaces\IRow');
+        
+        $key = 5;
+        
+        $this->rowCollection[$key] = $row;
+        
+        $this->assertSame($row, $this->rowCollection[$key]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetInvalidValue()
+    {
+        $this->rowCollection[] = $this->rowCollection; // Invalid type, should be an IRow
+    }
 }
