@@ -36,13 +36,13 @@ interface IDataDriver
      * Creates a new table in this driver. This should not be completed before a call to {@link commit}.
      * @param ITable $table The table to add.
      */
-    public function createTable(ITable $table);
+    function createTable(ITable $table);
 
     /**
      * Removes a table from this driver. This should not be completed before a call to {@link commit}.
      * @param string|ITable $name The table name to remove, or a table with the same name.
      */
-    public function dropTable($name);
+    function dropTable($name);
 
     /**
      * Gets a table from the driver.
@@ -50,18 +50,18 @@ interface IDataDriver
      * @return ITable The table.
      * @throws \OutOfBoundsException If the name is not an existing table.
      */
-    public function &getTable($name);
+    function &getTable($name);
 
     /**
      * Commits the pending operations to the persistent database.
      * @return bool Whether the operation was sucessful or not.
      */
-    public function commit();
+    function commit();
 
     /**
      * Cancel the pending operations.
      */
-    public function rollBack();
+    function rollBack();
 
     /**
      * Inserts a new row into the table.

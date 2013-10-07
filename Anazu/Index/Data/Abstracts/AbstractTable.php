@@ -41,16 +41,19 @@ abstract class AbstractTable implements ITable
      * @var string The name of this table.
      */
     protected $name;
+
     /**
      * The driver for persisting data.
      * @var IDataDriver The driver for persisting data.
      */
     protected $driver;
+
     /**
      * The columns of this table.
      * @var array The columns of this table.
      */
     protected $columns;
+
     /**
      * Inserts a new row into the table.
      * @param IRow $row The row to insert. The id should be generated if not set
@@ -148,14 +151,14 @@ abstract class AbstractTable implements ITable
         }
         array_walk($columns, function($elem)
         {
-            if (!($elem instanceof \Anazu\Index\Data\Interfaces\IColumn))
+            if ( !($elem instanceof \Anazu\Index\Data\Interfaces\IColumn) )
             {
                 throw new \InvalidArgumentException(sprintf(
                         'Argument %s must contain only %s. %s found.', 'columns', 'IColumn', gettype($elem)
                 ));
             }
         });
-        
+
         $this->driver = $driver;
         $this->name = $name;
         $this->columns = $columns;
