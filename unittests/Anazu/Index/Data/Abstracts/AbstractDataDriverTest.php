@@ -260,8 +260,9 @@ class AbstractDataDriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testInsertInvalidTable()
     {
+        $row = $this->getMock('\Anazu\Index\Data\Interfaces\IRow');
         $this->dataDriver->insert($this->dataDriver, // <- oops!
-                $this->getMock('\Anazu\Index\Data\Interfaces\IRow')
+                $row
                 ); 
     }
     
