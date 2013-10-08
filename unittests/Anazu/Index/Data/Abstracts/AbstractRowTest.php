@@ -164,12 +164,13 @@ class AbstractRowTest extends \PHPUnit_Framework_TestCase
     
     public function testConstructWithFields()
     {
-        $row = $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array(
-            $this->rowId,
+        $fields = 
             array(
                 'test' => 'value',
                 'test2' => 'value2',
-            )
+            );
+        $row = $this->getMockForAbstractClass('\Anazu\Index\Data\Abstracts\AbstractRow', array(
+            $this->rowId, $fields
             ));
         $this->assertEquals('value', $row->getField('test'));
         $this->assertEquals('value2', $row->getField('test2'));

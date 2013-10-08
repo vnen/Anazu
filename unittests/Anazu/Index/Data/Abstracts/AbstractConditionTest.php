@@ -75,21 +75,6 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cond, $list[0]);
     }
 
-    public function testAddNotCondition()
-    {
-        $field = 'test';
-        $op = '=';
-        $value = 'something';
-        $cond = array(AbstractCondition::NOT_COND, $field, $op, $value);
-        
-        $this->condition->addNotCondition($field, $op, $value);
-        
-        $list = $this->condition->getConditionsList();
-        
-        $this->assertCount(1, $list);
-        $this->assertEquals($cond, $list[0]);
-    }
-
     public function testOpenParens()
     {
         $cond = array(AbstractCondition::OPEN_PAREN);
@@ -123,23 +108,20 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         $cond0 = array(AbstractCondition::OPEN_PAREN);
         $cond1 = array(AbstractCondition::AND_COND, $field, $op, $value);
         $cond2 = array(AbstractCondition::OR_COND, $field, $op, $value);
-        $cond3 = array(AbstractCondition::NOT_COND, $field, $op, $value);
-        $cond4 = array(AbstractCondition::CLOSE_PAREN);
+        $cond3 = array(AbstractCondition::CLOSE_PAREN);
         
         $this->condition->openParens();
         $this->condition->addAndCondition($field, $op, $value);
         $this->condition->addOrCondition($field, $op, $value);
-        $this->condition->addNotCondition($field, $op, $value);
         $this->condition->closeParens();
         
         $list = $this->condition->getConditionsList();
         
-        $this->assertCount(5, $list);
+        $this->assertCount(4, $list);
         $this->assertEquals($cond0, $list[0]);
         $this->assertEquals($cond1, $list[1]);
         $this->assertEquals($cond2, $list[2]);
         $this->assertEquals($cond3, $list[3]);
-        $this->assertEquals($cond4, $list[4]);
     }
 
     /**
@@ -183,29 +165,6 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         $field = 'test';
         $value = 'something';
         $this->condition->addOrCondition($field , 
-                $this->condition // <- oops
-                , $value);
-    }
-    
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAddNotConditionInvalidField()
-    {
-        $op = '=';
-        $value = 'something';
-        $this->condition->addNotCondition(
-                $this->condition // <- oops
-                , $op, $value);
-    }
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testAddNotConditionInvalidOperation()
-    {
-        $field = 'test';
-        $value = 'something';
-        $this->condition->addNotCondition($field , 
                 $this->condition // <- oops
                 , $value);
     }

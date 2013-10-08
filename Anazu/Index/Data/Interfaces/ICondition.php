@@ -48,16 +48,7 @@ interface ICondition
      * @param mixed $value The value to filter the field.
      */
     function addOrCondition($field, $operator, $value);
-    
-    /**
-     * Sets a condition for a field that will be negated to match.
-     * 
-     * @param string $field The field to condition.
-     * @param string $operator The operation to use. This varies based on the table implementation.
-     * @param mixed $value The value to filter the field.
-     */
-    function addNotCondition($field, $operator, $value);
-    
+        
     /**
      * Opens a parenthesis "(" to allow complex conditions.
      */

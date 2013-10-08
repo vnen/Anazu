@@ -53,6 +53,7 @@ class MySQLConditionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddAndConditionInvalidOperator()
     {
+        
         $this->condition->addAndCondition(
                 'field', 'invalid operator', // <- oops!
                 'value'

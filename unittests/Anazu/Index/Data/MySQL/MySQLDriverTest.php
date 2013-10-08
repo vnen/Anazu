@@ -43,30 +43,49 @@ class MySQLDriverTest extends \Anazu\Tests\DatabaseTestCase
      */
     protected function setUp()
     {
-        $this->mysql = new MySQLDriver();
+        $this->mysql = new MySQLDriver($GLOBALS['DB_SERVER'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
     }
-    
+
+    /**
+     * Returns the test dataset.
+     *
+     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     */
     protected function getDataSet()
     {
-        
+        return $this->createMySQLXMLDataSet(__DIR__ . '/sampledata/MySQLDriverTest.xml');
     }
 
-    /**
-     * @covers Anazu\Index\Data\MySQL\MySQLDriver::getTable
-     * @todo   Implement testGetTable().
-     */
     public function testGetTable()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
+        $tableColumns = array(
+            new MySQLColumn('id', new MySQLValueType('int', 10), NULL, 'PRIMARY'),
+            new MySQLColumn('column1', new MySQLValueType('varchar', 15), NULL, 'INDEX'),
+            new MySQLColumn('column2', new MySQLValueType('int', 11), 0),
         );
+
+        $table = $this->mysql->getTable('testTable1');
+
+        $this->assertEquals('testTable1', $table->getName());
+        $this->assertEquals($tableColumns, $table->getColumns());
     }
 
     /**
-     * @covers Anazu\Index\Data\MySQL\MySQLDriver::commit
-     * @todo   Implement testCommit().
+     * @expectedException \OutOfBoundsException
      */
+    public function testGetInexistentTable()
+    {
+        $this->mysql->getTable('notable');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetInvalidTableAnotherObjectGiven()
+    {
+        $this->mysql->getTable($this->mysql); // <- oops, that's no table!
+    }
+
     public function testCommit()
     {
         // Remove the following lines when you implement this test.
@@ -75,27 +94,162 @@ class MySQLDriverTest extends \Anazu\Tests\DatabaseTestCase
         );
     }
 
-    /**
-     * @covers Anazu\Index\Data\MySQL\MySQLDriver::retrieve
-     * @todo   Implement testRetrieve().
-     */
     public function testRetrieve()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $row1 = new MySQLRow(1, array(
+            'column1' => 'test1',
+            'column2' => 25
+        ));
+        $row2 = new MySQLRow(2, array(
+            'column1' => 'test2',
+            'column2' => 47
+        ));
+
+        $condition1 = new MySQLCondition();
+        $condition1->addAndCondition('id', '=', 1);
+
+        $condition2 = new MySQLCondition();
+        $condition2->openParens();
+        $condition2->addAndCondition('column2', '=', 47);
+        $condition2->closeParens();
+
+        $gotRow1 = $this->mysql->retrieve('testTable1', $condition1);
+        $gotRow2 = $this->mysql->retrieve('testTable1', $condition2);
+
+        $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow1);
+        $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow2);
+        $this->assertCount(1, $gotRow1);
+        $this->assertCount(1, $gotRow2);
+        $this->assertEquals($row1, $gotRow1[0]);
+        $this->assertEquals($row2, $gotRow2[0]);
+    }
+    
+    public function testRetrieveEmptyCondition()
+    {
+        $row1 = new MySQLRow(1, array(
+            'column1' => 'test1',
+            'column2' => 25
+        ));
+        $row2 = new MySQLRow(2, array(
+            'column1' => 'test2',
+            'column2' => 47
+        ));
+        
+        $coll = new \Anazu\Index\Data\RowCollection(array($row1, $row2));
+
+        $condition = new MySQLCondition();
+
+        $gotRow = $this->mysql->retrieve('testTable1', $condition);
+
+        $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow);
+        $this->assertCount(2, $gotRow);
+        $this->assertEquals($coll, $gotRow);
+    }
+    
+    /**
+     * @expectedException \Exception
+     */
+    public function testRetrieveStrangeCondition()
+    {
+        $condition = new MySQLCondition();
+        $condition->openParens();
+
+        $this->mysql->retrieve('testTable1', $condition);
     }
 
     /**
-     * @covers Anazu\Index\Data\MySQL\MySQLDriver::getTypeForDriver
-     * @todo   Implement testGetTypeForDriver().
+     * @expectedException \InvalidArgumentException
      */
+    public function testRetrieveInvalidTableAnotherObjectGiven()
+    {
+        $condition = $this->getMock('\Anazu\Index\Data\Interfaces\ICondition');
+        $this->mysql->retrieve($this->mysql, $condition); // <- oops, that's no table!
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testRetrieveInexistentTable()
+    {
+        $conditionType = $this->mysql->getTypeForDriver('ICondition');
+        $condition = new $conditionType();
+        $this->mysql->retrieve(
+                'oops!' // <- oops, there's no such table!
+                , $condition);
+    }
+
     public function testGetTypeForDriver()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->assertEquals('\Anazu\Index\Data\MySQL\MySQLCondition', $this->mysql->getTypeForDriver('ICondition'));
+        $this->assertEquals('\Anazu\Index\Data\MySQL\MySQLRow', $this->mysql->getTypeForDriver('IRow'));
+        $this->assertEquals('\Anazu\Index\Data\MySQL\MySQLTable', $this->mysql->getTypeForDriver('ITable'));
+        $this->assertEquals('\Anazu\Index\Data\MySQL\MySQLValueType', $this->mysql->getTypeForDriver('IValueType'));
+        $this->assertEquals('\Anazu\Index\Data\MySQL\MySQLColumn', $this->mysql->getTypeForDriver('IColumn'));
     }
+    
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testGetTypeForDriverInvalidObjectGiven()
+    {
+        $this->mysql->getTypeForDriver(
+                $this->mysql // <- this was supposed to be a string.
+                );
+    }
+    
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testGetTypeForDriverInexistentObjectGiven()
+    {
+        $this->mysql->getTypeForDriver(
+                'INotInterface' // <- this interface is not an existing one.
+                );
+    }
+    
+    /**
+     * @expectedException \Anazu\Index\Data\MySQL\Exceptions\BadConditionException
+     */
+    public function testRetrieveBadConditionBinaryOperator()
+    {
+        $condition = new MySQLCondition();
+        $condition->addAndCondition('column1', '=', array(1,2)); // there should be only one value for '='
+        
+        $this->mysql->retrieve('testTable1', $condition);
+    }
+    
+    /**
+     * @expectedException \Anazu\Index\Data\MySQL\Exceptions\BadConditionException
+     */
+    public function testRetrieveBadConditionBinaryFunction()
+    {
+        $condition = new MySQLCondition();
+        $condition->addAndCondition('', 'STRCMP', array(1)); // there should be 2 values for STRCMP
+        
+        $this->mysql->retrieve('testTable1', $condition);
+    }
+    
+    /**
+     * @expectedException \Anazu\Index\Data\MySQL\Exceptions\BadConditionException
+     */
+    public function testRetrieveBadConditionBetweenOperator()
+    {
+        $condition = new MySQLCondition();
+        $condition->addAndCondition('column1', 'BETWEEN', array(1)); // there should be 2 values for BETWEEN
+        
+        $this->mysql->retrieve('testTable1', $condition);
+    }
+    
+    /**
+     * @expectedException \Anazu\Index\Data\MySQL\Exceptions\BadConditionException
+     */
+    public function testRetrieveBadConditionArrayOperator()
+    {
+        $condition = new MySQLCondition();
+        $condition->addAndCondition('column1', 'IN', 1); // there should be an array of values for IN
+        
+        $this->mysql->retrieve('testTable1', $condition);
+    }
+    
+
 }

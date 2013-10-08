@@ -45,11 +45,6 @@ abstract class AbstractCondition implements ICondition
     const AND_COND = 'AND';
 
     /**
-     * An NOT condition.
-     */
-    const NOT_COND = 'NOT';
-
-    /**
      * Opening parenthesis.
      */
     const OPEN_PAREN = '(';
@@ -74,7 +69,7 @@ abstract class AbstractCondition implements ICondition
      */
     public function addAndCondition($field, $operator, $value)
     {
-        $this->testFieldAndOperator($field, $operator);
+        list($field, $operator) = $this->testFieldAndOperator($field, $operator);
         $this->conditions[] = array(
             self::AND_COND,
             $field,
@@ -92,27 +87,9 @@ abstract class AbstractCondition implements ICondition
      */
     public function addOrCondition($field, $operator, $value)
     {
-        $this->testFieldAndOperator($field, $operator);
+        list($field, $operator) = $this->testFieldAndOperator($field, $operator);
         $this->conditions[] = array(
             self::OR_COND,
-            $field,
-            $operator,
-            $value,
-        );
-    }
-
-    /**
-     * Sets a condition for a field that will be negated to match.
-     * 
-     * @param string $field The field to condition.
-     * @param string $operator The operation to use. This varies based on the table implementation.
-     * @param mixed $value The value to filter the field.
-     */
-    public function addNotCondition($field, $operator, $value)
-    {
-        $this->testFieldAndOperator($field, $operator);
-        $this->conditions[] = array(
-            self::NOT_COND,
             $field,
             $operator,
             $value,
@@ -141,7 +118,7 @@ abstract class AbstractCondition implements ICondition
                     , 'operator', 'a string', gettype($operator))
             );
         }
-        return true;
+        return array($field, $operator);
     }
 
     /**

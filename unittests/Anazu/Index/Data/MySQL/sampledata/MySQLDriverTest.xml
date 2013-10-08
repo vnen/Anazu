@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="anazutest">
+	<table_data name="testTable1">
+	<row>
+		<field name="id">1</field>
+		<field name="column1">test1</field>
+		<field name="column2">25</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="column1">test2</field>
+		<field name="column2">47</field>
+	</row>
+	</table_data>
+	<table_data name="testTable2">
+	<row>
+		<field name="id">1</field>
+		<field name="column1">Just a little text.</field>
+		<field name="column2">65</field>
+		<field name="column3">oopsa!</field>
+	</row>
+	<row>
+		<field name="id">2</field>
+		<field name="column1">Just another little text.</field>
+		<field name="column2">42</field>
+		<field name="column3">yes</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>

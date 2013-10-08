@@ -68,22 +68,9 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     public function testQueueDequeueDocument()
     {
         $document = new \Anazu\Analysis\Document(1, 'this is a test');
-
-        $old_doc = FALSE;
-        try
-        {
-            $this->setExpectedException('\OutOfBoundsException');
-            $old_doc = $this->indexer->dequeueDocument($document->getId());
-        }
-        catch (Exception $ex)
-        {
-            
-        }
-
-        $this->assertEquals(FALSE, $old_doc);
-
+        
         $this->indexer->queueDocument($document);
-        $new_doc = $this->indexer->dequeueDocument($document->getId());
+        $new_doc = $this->indexer->dequeueDocument($document);
 
         $this->assertSame($document, $new_doc);
     }

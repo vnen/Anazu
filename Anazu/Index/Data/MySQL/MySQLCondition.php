@@ -39,14 +39,16 @@ class MySQLCondition extends Abstracts\AbstractCondition
      * @param string $operator The operator.
      * @throws \InvalidArgumentException If any of it is not valid.
      */
-    protected function testFieldAndOperator($field, &$operator)
+    protected function testFieldAndOperator($field, $operator)
     {
         parent::testFieldAndOperator($field, $operator);
 
         $operators = array(
-            '=', '<', '>', '<=>', '<=', '>=', '!=', '<>', '>',
+            '=', '<', '>', '<=>', '<=', '>=', '!=', '<>', 
             'IN', 'LIKE', 'GREATEST', 'LEAST', 'IS', 'ISNULL',
-            'INTERVAL', 'BETWEEN', 'STRCMP', 'COALESCE'
+            'INTERVAL', 'BETWEEN', 'STRCMP',
+            'IS NOT', 'IS NOT NULL', 'NOT BETWEEN', 'NOT LIKE',
+            'NOT IN'
         );
         $operator = strtoupper($operator);
         if ( !in_array($operator, $operators, true) )
@@ -56,6 +58,6 @@ class MySQLCondition extends Abstracts\AbstractCondition
                     , 'operator', 'operator')
             );
         }
+        return array($field, $operator);
     }
-
 }

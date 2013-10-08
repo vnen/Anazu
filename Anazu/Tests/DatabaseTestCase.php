@@ -34,11 +34,16 @@ abstract class DatabaseTestCase extends \PHPUnit_Extensions_Database_TestCase
  
     private $connection = null;
  
+    /**
+     * Returns the test database connection.
+     *
+     * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     */
     final public function getConnection()
     {
         if ($this->connection === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+                self::$pdo = new \PDO( "mysql:host={$GLOBALS['DB_SERVER']};dbname={$GLOBALS['DB_DBNAME']}" , $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
             }
             $this->connection = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }

@@ -18,14 +18,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+namespace Anazu\Index\Data\MySQL\Exceptions;
+
 /**
+ * Exception thrown when a condition is malformed for some reason.
+ *
  * @author George Marques <george at georgemarques.com.br>
+ * @package Anazu
+ * @category Index/Data/MySQL/Exceptions
+ * @license https://raw.github.com/vnen/Anazu/master/LICENSE GNU Public License v2
  */
-include_once __DIR__ . '/../autoload.php';
-
-// Empty classes to include here, or else they don't show as covered:
-
-include_once __DIR__ . '/../Anazu/Index/Data/MySQL/MySQLTable.php';
-include_once __DIR__ . '/../Anazu/Index/Data/MySQL/MySQLRow.php';
-include_once __DIR__ . '/../Anazu/Index/Data/MySQL/MySQLValueType.php';
-include_once __DIR__ . '/../Anazu/Index/Data/MySQL/Exceptions/BadConditionException.php';
+class BadConditionException extends \Exception
+{
+    
+}

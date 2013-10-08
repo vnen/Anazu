@@ -5,6 +5,7 @@ php:
 
 before_script:
     - mysql -e 'drop database if exists `anazutest`; create database `anazutest`;'
+    - mysql -D 'anazutest' < unittests/testdb.sql
     - composer install -v --dev
 
 script:

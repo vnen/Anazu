@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
         </testsuit>
     </testsuites>
     <php>
-        <var name="DB_DSN" value="mysql:dbname=anazutest;host=localhost" />
+        <var name="DB_SERVER" value="localhost" />
         <var name="DB_USER" value="travis" />
         <var name="DB_PASSWD" value="" />
         <var name="DB_DBNAME" value="anazutest" />
