@@ -21,6 +21,9 @@
 /**
  * @author George Marques <george at georgemarques.com.br>
  */
+
+error_reporting(E_ALL | E_STRICT);
+
 include_once __DIR__ . '/../autoload.php';
 
 // Empty classes to include here, or else they don't show as covered:

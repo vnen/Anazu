@@ -128,7 +128,8 @@ abstract class AbstractRow implements \Anazu\Index\Data\Interfaces\IRow
         $this->id = $id;
         if ( !empty($fields) )
         {
-            array_walk(array_keys($fields), function($elem)
+            $keys = array_keys($fields);
+            array_walk($keys, function($elem)
             {
                 if ( !is_string($elem) )
                 {
