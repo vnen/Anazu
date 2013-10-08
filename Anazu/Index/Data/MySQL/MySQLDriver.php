@@ -355,9 +355,11 @@ class MySQLDriver extends Abstracts\AbstractDataDriver
                 $values = array_combine($list, $value);
                 return array($stmt, $values);
                 
+            // @codeCoverageIgnoreStart
             default:
                 throw new Exceptions\BadConditionException('Unknown operation.');
         }
+            // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -369,7 +371,9 @@ class MySQLDriver extends Abstracts\AbstractDataDriver
     {
         if(empty($field))
         {
+            // @codeCoverageIgnoreStart
             return '';
+            // @codeCoverageIgnoreEnd
         }
         $parts = explode('.', $field);
         $result = array_reduce($parts, function($set, $elem)

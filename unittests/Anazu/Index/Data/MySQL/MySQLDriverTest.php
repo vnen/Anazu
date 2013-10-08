@@ -68,6 +68,11 @@ class MySQLDriverTest extends \Anazu\Tests\DatabaseTestCase
 
         $this->assertEquals('testTable1', $table->getName());
         $this->assertEquals($tableColumns, $table->getColumns());
+        
+        $table2 = $this->mysql->getTable($table);
+        
+        $this->assertEquals('testTable1', $table2->getName());
+        $this->assertEquals($tableColumns, $table2->getColumns());
     }
 
     /**
@@ -104,6 +109,11 @@ class MySQLDriverTest extends \Anazu\Tests\DatabaseTestCase
             'column1' => 'test2',
             'column2' => 47
         ));
+        $row3 = new MySQLRow(1, array(
+            'column1' => 2,
+            'column2' => 3,
+            'column3' => 'Test.',
+        ));
 
         $condition1 = new MySQLCondition();
         $condition1->addAndCondition('id', '=', 1);
@@ -112,17 +122,27 @@ class MySQLDriverTest extends \Anazu\Tests\DatabaseTestCase
         $condition2->openParens();
         $condition2->addAndCondition('column2', '=', 47);
         $condition2->closeParens();
+        
+        $condition3 = new MySQLCondition();
+        $condition3->addAndCondition('column1', '=', 2);
+        $condition3->addAndCondition('column3', 'LIKE', 'Test.');
 
         $gotRow1 = $this->mysql->retrieve('testTable1', $condition1);
         $gotRow2 = $this->mysql->retrieve('testTable1', $condition2);
+        $gotRow3 = $this->mysql->retrieve('testTable3', $condition3);
 
         $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow1);
         $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow2);
+        $this->assertInstanceOf('\Anazu\Index\Data\RowCollection', $gotRow3);
         $this->assertCount(1, $gotRow1);
         $this->assertCount(1, $gotRow2);
+        $this->assertCount(1, $gotRow3);
         $this->assertEquals($row1, $gotRow1[0]);
         $this->assertEquals($row2, $gotRow2[0]);
+        $this->assertEquals($row3, $gotRow3[0]);
     }
+    
+    
     
     public function testRetrieveEmptyCondition()
     {
