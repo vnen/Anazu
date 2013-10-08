@@ -18,11 +18,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 -->
 
 <phpunit colors="false" >
-    <testsuites name="Main Suite">
-        <testsuit>
-            <directory>Tests</directory>
-        </testsuit>
-    </testsuites>
+    <testsuite name="Main Suite">
+        <directory suffix='.php'>unittests</directory>
+    </testsuite>
     <php>
         <var name="DB_SERVER" value="localhost" />
         <var name="DB_USER" value="anazu" />
